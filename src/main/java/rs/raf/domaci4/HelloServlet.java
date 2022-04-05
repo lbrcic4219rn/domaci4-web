@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
@@ -20,14 +22,14 @@ public class HelloServlet extends HttpServlet {
 
 
     public void init() {
-        HashMap<String, HashMap<String, Integer>> order = new HashMap<>();
-        order.put("ponedeljak",  new HashMap<>());
-        order.put("utorak",      new HashMap<>());
-        order.put("sreda",       new HashMap<>());
-        order.put("cetvrtak",    new HashMap<>());
-        order.put("petak",       new HashMap<>());
+        ConcurrentHashMap<String, ConcurrentHashMap<String, Integer>> order = new ConcurrentHashMap<>();
+        order.put("ponedeljak",  new ConcurrentHashMap<>());
+        order.put("utorak",      new ConcurrentHashMap<>());
+        order.put("sreda",       new ConcurrentHashMap<>());
+        order.put("cetvrtak",    new ConcurrentHashMap<>());
+        order.put("petak",       new ConcurrentHashMap<>());
 
-        getServletContext().setAttribute(SUBMITTED_USERS, new ArrayList<>());
+        getServletContext().setAttribute(SUBMITTED_USERS, new CopyOnWriteArrayList<>());
         getServletContext().setAttribute(ORDER, order);
 
         menu.put("ponedeljak",  this.ponendeljak);
@@ -60,7 +62,7 @@ public class HelloServlet extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         out.println("<html><body>");
-        ArrayList<String> submittedUsers = (ArrayList<String>) getServletContext().getAttribute(SUBMITTED_USERS);
+        CopyOnWriteArrayList<String> submittedUsers = (CopyOnWriteArrayList<String>) getServletContext().getAttribute(SUBMITTED_USERS);
         if(!submittedUsers.contains(request.getSession().getId())){
             out.println("<h1>Odaberite vas rucal:</h1>");
             out.println("<form action=\"submit\" method=\"post\">");

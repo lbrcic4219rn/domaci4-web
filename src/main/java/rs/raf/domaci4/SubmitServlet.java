@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static rs.raf.domaci4.HelloServlet.*;
 
@@ -21,11 +23,9 @@ public class SubmitServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        ArrayList<String> submittedUsers = (ArrayList<String>) getServletContext().getAttribute(SUBMITTED_USERS);
-        HashMap<String, HashMap<String, Integer>> menu = (HashMap<String, HashMap<String, Integer>>) getServletContext().getAttribute(ORDER);
+        CopyOnWriteArrayList<String> submittedUsers = (CopyOnWriteArrayList<String>) getServletContext().getAttribute(SUBMITTED_USERS);
+        ConcurrentHashMap<String, ConcurrentHashMap<String, Integer>> menu = (ConcurrentHashMap<String, ConcurrentHashMap<String, Integer>>) getServletContext().getAttribute(ORDER);
         submittedUsers.add(request.getSession().getId());
-
-        request.getSession().setAttribute("submitted", 1);
 
         //dodajemo stvari u meni
         menu.get("ponedeljak")

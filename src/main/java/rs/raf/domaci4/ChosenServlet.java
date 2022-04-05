@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static rs.raf.domaci4.HelloServlet.ORDER;
 import static rs.raf.domaci4.HelloServlet.SUBMITTED_USERS;
@@ -36,7 +38,7 @@ public class ChosenServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
 
-        HashMap<String, HashMap<String, Integer>> menu = (HashMap<String, HashMap<String, Integer>>) getServletContext().getAttribute(ORDER);
+        ConcurrentHashMap<String, ConcurrentHashMap<String, Integer>> menu = (ConcurrentHashMap<String, ConcurrentHashMap<String, Integer>>) getServletContext().getAttribute(ORDER);
 
         out.println("<html><body>");
         if (request.getParameter("lozinka") != null && request.getParameter("lozinka").equals(password)) {
@@ -124,8 +126,8 @@ public class ChosenServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HashMap<String, HashMap<String, Integer>> menu = (HashMap<String, HashMap<String, Integer>>) getServletContext().getAttribute(ORDER);
-        ArrayList<String> submittedUsers = (ArrayList<String>) getServletContext().getAttribute(SUBMITTED_USERS);
+        ConcurrentHashMap<String, ConcurrentHashMap<String, Integer>> menu = (ConcurrentHashMap<String, ConcurrentHashMap<String, Integer>>) getServletContext().getAttribute(ORDER);
+        CopyOnWriteArrayList<String> submittedUsers = (CopyOnWriteArrayList<String>) getServletContext().getAttribute(SUBMITTED_USERS);
 
         menu.get("ponedeljak").clear();
         menu.get("utorak").clear();
